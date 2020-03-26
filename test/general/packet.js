@@ -902,38 +902,38 @@ V+HOQJQxXJkVRYa3QrFUehiMzTeqqMdgC6ZqJy7+
     const keySize = util.getWebCryptoAll() ? 2048 : 512; // webkit webcrypto accepts minimum 2048 bit keys
 
     return crypto.generateParams(rsa, keySize, 65537).then(function({ privateParams, publicParams }) {
-        const testText = input.createSomeMessage();
+      const testText = input.createSomeMessage();
 
-        key.publicParams = publicParams;
-        key.privateParams = privateParams;
-        key.algorithm = "rsaSign";
+      key.publicParams = publicParams;
+      key.privateParams = privateParams;
+      key.algorithm = "rsaSign";
 
-        const signed = new openpgp.PacketList();
-        const literal = new openpgp.LiteralDataPacket();
-        const signature = new openpgp.SignaturePacket();
+      const signed = new openpgp.PacketList();
+      const literal = new openpgp.LiteralDataPacket();
+      const signature = new openpgp.SignaturePacket();
 
-        literal.setText(testText);
+      literal.setText(testText);
 
-        signature.hashAlgorithm = 'sha256';
-        signature.publicKeyAlgorithm = 'rsaSign';
-        signature.signatureType = 'text';
+      signature.hashAlgorithm = openpgp.enums.hash.sha256;
+      signature.publicKeyAlgorithm = openpgp.enums.publicKey.rsaSign;
+      signature.signatureType = openpgp.enums.signature.text;
 
-        return signature.sign(key, literal).then(async () => {
+      return signature.sign(key, literal).then(async () => {
 
-          signed.push(literal);
-          signed.push(signature);
+        signed.push(literal);
+        signed.push(signature);
 
-          const raw = signed.write();
+        const raw = signed.write();
 
-          const signed2 = new openpgp.PacketList();
-          await signed2.read(raw, openpgp);
-          signed2.concat(await openpgp.stream.readToEnd(signed2.stream, arr => arr));
+        const signed2 = new openpgp.PacketList();
+        await signed2.read(raw, openpgp);
+        signed2.concat(await openpgp.stream.readToEnd(signed2.stream, arr => arr));
 
-          await Promise.all([
-            expect(signed2[1].verify(key, openpgp.enums.signature.text, signed2[0])).to.eventually.be.true,
-            openpgp.stream.pipe(signed2[0].getBytes(), new openpgp.stream.WritableStream())
-          ]);
-        });
+        await Promise.all([
+          expect(signed2[1].verify(key, openpgp.enums.signature.text, signed2[0])).to.eventually.be.true,
+          openpgp.stream.pipe(signed2[0].getBytes(), new openpgp.stream.WritableStream())
+        ]);
+      });
     });
   });
 });

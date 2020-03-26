@@ -2584,9 +2584,18 @@ function versionSpecificTests() {
 }
 
 module.exports = () => describe('Key', function() {
+  let v5KeysVal;
+  let aeadProtectVal;
 
   tryTests('V4', versionSpecificTests, {
-    if: !openpgp.config.ci
+    if: !openpgp.config.ci,
+    beforeEach: function() {
+      v5KeysVal = openpgp.config.v5Keys;
+      openpgp.config.v5Keys = false;
+    },
+    afterEach: function() {
+      openpgp.config.v5Keys = v5KeysVal;
+    }
   });
 
   tryTests('V5', versionSpecificTests, {

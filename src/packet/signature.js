@@ -99,8 +99,6 @@ class SignaturePacket {
   /**
    * parsing function for a signature packet (tag 2).
    * @param {String} bytes payload of a tag 2 packet
-   * @param {Integer} position position to start reading from the bytes string
-   * @param {Integer} len length of the packet or the remaining length of bytes at position
    * @returns {SignaturePacket} object representation
    */
   read(bytes) {
