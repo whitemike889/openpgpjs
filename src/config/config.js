@@ -46,13 +46,12 @@ export default {
 
   /**
    * Use Authenticated Encryption with Additional Data (AEAD) protection for symmetric encryption.
-   * **NOT INTEROPERABLE WITH OTHER OPENPGP IMPLEMENTATIONS**
-   * **FUTURE OPENPGP.JS VERSIONS MAY BREAK COMPATIBILITY WHEN USING THIS OPTION**
+   * Note: not all OpenPGP implementations are compatible with this option.
    * @see {@link https://tools.ietf.org/html/draft-ietf-openpgp-rfc4880bis-07|RFC4880bis-07}
    * @memberof module:config
    * @property {Boolean} aeadProtect
    */
-  aeadProtect: false,
+  aeadProtect: true,
   /**
    * Default Authenticated Encryption with Additional Data (AEAD) encryption mode
    * Only has an effect when aeadProtect is set to true.

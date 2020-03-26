@@ -2038,7 +2038,16 @@ function versionSpecificTests() {
       expect(key.users[0].selfCertifications[0].preferredHashAlgorithms).to.eql([hash.sha256, hash.sha512]);
       const compr = openpgp.enums.compression;
       expect(key.users[0].selfCertifications[0].preferredCompressionAlgorithms).to.eql([compr.zlib, compr.zip, compr.uncompressed]);
-      expect(key.users[0].selfCertifications[0].features).to.eql(openpgp.config.v5Keys ? [7] : [1]);
+
+      let expectedFeatures;
+      if (openpgp.config.v5Keys) {
+        expectedFeatures = [7]; // v5 + aead + mdc
+      } else if (openpgp.config.aeadProtect) {
+        expectedFeatures = [3]; // aead + mdc
+      } else {
+        expectedFeatures = [1]; // mdc
+      }
+      expect(key.users[0].selfCertifications[0].features).to.eql(expectedFeatures);
     };
     const opt = { userIds: 'test <a@b.com>', passphrase: 'hello' };
     return openpgp.generateKey(opt).then(async function(key) {
@@ -2074,7 +2083,16 @@ function versionSpecificTests() {
       expect(key.users[0].selfCertifications[0].preferredHashAlgorithms).to.eql([hash.sha224, hash.sha256, hash.sha512]);
       const compr = openpgp.enums.compression;
       expect(key.users[0].selfCertifications[0].preferredCompressionAlgorithms).to.eql([compr.zlib, compr.zip, compr.uncompressed]);
-      expect(key.users[0].selfCertifications[0].features).to.eql(openpgp.config.v5Keys ? [7] : [1]);
+
+      let expectedFeatures;
+      if (openpgp.config.v5Keys) {
+        expectedFeatures = [7]; // v5 + aead + mdc
+      } else if (openpgp.config.aeadProtect) {
+        expectedFeatures = [3]; // aead + mdc
+      } else {
+        expectedFeatures = [1]; // mdc
+      }
+      expect(key.users[0].selfCertifications[0].features).to.eql(expectedFeatures);
     };
     const opt = { userIds: 'test <a@b.com>', passphrase: 'hello' };
     try {
