@@ -255,9 +255,9 @@ function tests() {
     expect(await reader.readToEnd()).to.deep.equal(util.concatUint8Array(plaintext));
   });
 
-  it('Encrypt and decrypt larger message roundtrip (allow_unauthenticated_stream=true)', async function() {
-    let allow_unauthenticated_streamValue = openpgp.config.allow_unauthenticated_stream;
-    openpgp.config.allow_unauthenticated_stream = true;
+  it('Encrypt and decrypt larger message roundtrip (allowUnauthenticatedStream=true)', async function() {
+    let allowUnauthenticatedStreamValue = openpgp.config.allowUnauthenticatedStream;
+    openpgp.config.allowUnauthenticatedStream = true;
     try {
       const encrypted = await openpgp.encrypt({
         message: openpgp.message.fromBinary(data),
@@ -280,13 +280,13 @@ function tests() {
       expect(await reader.readToEnd()).to.deep.equal(util.concatUint8Array(plaintext));
       expect(decrypted.signatures).to.exist.and.have.length(0);
     } finally {
-      openpgp.config.allow_unauthenticated_stream = allow_unauthenticated_streamValue;
+      openpgp.config.allowUnauthenticatedStream = allowUnauthenticatedStreamValue;
     }
   });
 
-  it('Encrypt and decrypt larger message roundtrip using public keys (allow_unauthenticated_stream=true)', async function() {
-    let allow_unauthenticated_streamValue = openpgp.config.allow_unauthenticated_stream;
-    openpgp.config.allow_unauthenticated_stream = true;
+  it('Encrypt and decrypt larger message roundtrip using public keys (allowUnauthenticatedStream=true)', async function() {
+    let allowUnauthenticatedStreamValue = openpgp.config.allowUnauthenticatedStream;
+    openpgp.config.allowUnauthenticatedStream = true;
     try {
       const encrypted = await openpgp.encrypt({
         message: openpgp.message.fromBinary(data),
@@ -309,13 +309,13 @@ function tests() {
       dataArrived();
       expect(await reader.readToEnd()).to.deep.equal(util.concatUint8Array(plaintext));
     } finally {
-      openpgp.config.allow_unauthenticated_stream = allow_unauthenticated_streamValue;
+      openpgp.config.allowUnauthenticatedStream = allowUnauthenticatedStreamValue;
     }
   });
 
-  it('Encrypt and decrypt larger message roundtrip using curve x25519 (allow_unauthenticated_stream=true)', async function() {
-    let allow_unauthenticated_streamValue = openpgp.config.allow_unauthenticated_stream;
-    openpgp.config.allow_unauthenticated_stream = true;
+  it('Encrypt and decrypt larger message roundtrip using curve x25519 (allowUnauthenticatedStream=true)', async function() {
+    let allowUnauthenticatedStreamValue = openpgp.config.allowUnauthenticatedStream;
+    openpgp.config.allowUnauthenticatedStream = true;
     const priv = await openpgp.key.readArmored(xPriv);
     const pub = await openpgp.key.readArmored(xPub);
     await priv.decrypt(xPass);
@@ -341,13 +341,13 @@ function tests() {
       dataArrived();
       expect(await reader.readToEnd()).to.deep.equal(util.concatUint8Array(plaintext));
     } finally {
-      openpgp.config.allow_unauthenticated_stream = allow_unauthenticated_streamValue;
+      openpgp.config.allowUnauthenticatedStream = allowUnauthenticatedStreamValue;
     }
   });
 
-  it('Encrypt and decrypt larger message roundtrip using curve brainpool (allow_unauthenticated_stream=true)', async function() {
-    let allow_unauthenticated_streamValue = openpgp.config.allow_unauthenticated_stream;
-    openpgp.config.allow_unauthenticated_stream = true;
+  it('Encrypt and decrypt larger message roundtrip using curve brainpool (allowUnauthenticatedStream=true)', async function() {
+    let allowUnauthenticatedStreamValue = openpgp.config.allowUnauthenticatedStream;
+    openpgp.config.allowUnauthenticatedStream = true;
     const priv = await openpgp.key.readArmored(brainpoolPriv);
     const pub = await openpgp.key.readArmored(brainpoolPub);
     await priv.decrypt(brainpoolPass);
@@ -373,13 +373,13 @@ function tests() {
       dataArrived();
       expect(await reader.readToEnd()).to.deep.equal(util.concatUint8Array(plaintext));
     } finally {
-      openpgp.config.allow_unauthenticated_stream = allow_unauthenticated_streamValue;
+      openpgp.config.allowUnauthenticatedStream = allowUnauthenticatedStreamValue;
     }
   });
 
-  it('Detect MDC modifications (allow_unauthenticated_stream=true)', async function() {
-    let allow_unauthenticated_streamValue = openpgp.config.allow_unauthenticated_stream;
-    openpgp.config.allow_unauthenticated_stream = true;
+  it('Detect MDC modifications (allowUnauthenticatedStream=true)', async function() {
+    let allowUnauthenticatedStreamValue = openpgp.config.allowUnauthenticatedStream;
+    openpgp.config.allowUnauthenticatedStream = true;
     try {
       const encrypted = await openpgp.encrypt({
         message: openpgp.message.fromBinary(data),
@@ -407,13 +407,13 @@ function tests() {
       await expect(reader.readToEnd()).to.be.rejectedWith('Modification detected.');
       expect(decrypted.signatures).to.exist.and.have.length(0);
     } finally {
-      openpgp.config.allow_unauthenticated_stream = allow_unauthenticated_streamValue;
+      openpgp.config.allowUnauthenticatedStream = allowUnauthenticatedStreamValue;
     }
   });
 
-  it('Detect armor checksum error (allow_unauthenticated_stream=true)', async function() {
-    let allow_unauthenticated_streamValue = openpgp.config.allow_unauthenticated_stream;
-    openpgp.config.allow_unauthenticated_stream = true;
+  it('Detect armor checksum error (allowUnauthenticatedStream=true)', async function() {
+    let allowUnauthenticatedStreamValue = openpgp.config.allowUnauthenticatedStream;
+    openpgp.config.allowUnauthenticatedStream = true;
     try {
       const encrypted = await openpgp.encrypt({
         message: openpgp.message.fromBinary(data),
@@ -442,13 +442,13 @@ function tests() {
       await expect(reader.readToEnd()).to.be.rejectedWith('Ascii armor integrity check on message failed');
       expect(decrypted.signatures).to.exist.and.have.length(1);
     } finally {
-      openpgp.config.allow_unauthenticated_stream = allow_unauthenticated_streamValue;
+      openpgp.config.allowUnauthenticatedStream = allowUnauthenticatedStreamValue;
     }
   });
 
-  it('Detect armor checksum error when not passing public keys (allow_unauthenticated_stream=true)', async function() {
-    let allow_unauthenticated_streamValue = openpgp.config.allow_unauthenticated_stream;
-    openpgp.config.allow_unauthenticated_stream = true;
+  it('Detect armor checksum error when not passing public keys (allowUnauthenticatedStream=true)', async function() {
+    let allowUnauthenticatedStreamValue = openpgp.config.allowUnauthenticatedStream;
+    openpgp.config.allowUnauthenticatedStream = true;
     try {
       const encrypted = await openpgp.encrypt({
         message: openpgp.message.fromBinary(data),
@@ -477,7 +477,7 @@ function tests() {
       expect(decrypted.signatures).to.exist.and.have.length(1);
       expect(await decrypted.signatures[0].verified).to.be.null;
     } finally {
-      openpgp.config.allow_unauthenticated_stream = allow_unauthenticated_streamValue;
+      openpgp.config.allowUnauthenticatedStream = allowUnauthenticatedStreamValue;
     }
   });
 
@@ -509,10 +509,10 @@ function tests() {
   });
 
   it('Encrypt and decrypt larger message roundtrip (AEAD)', async function() {
-    let aead_protectValue = openpgp.config.aead_protect;
-    let aead_chunk_size_byteValue = openpgp.config.aead_chunk_size_byte;
-    openpgp.config.aead_protect = true;
-    openpgp.config.aead_chunk_size_byte = 4;
+    let aeadProtectValue = openpgp.config.aeadProtect;
+    let aeadChunkSizeByteValue = openpgp.config.aeadChunkSizeByte;
+    openpgp.config.aeadProtect = true;
+    openpgp.config.aeadChunkSizeByte = 4;
 
     try {
       const encrypted = await openpgp.encrypt({
@@ -534,16 +534,16 @@ function tests() {
       dataArrived();
       expect(await reader.readToEnd()).to.deep.equal(util.concatUint8Array(plaintext));
     } finally {
-      openpgp.config.aead_protect = aead_protectValue;
-      openpgp.config.aead_chunk_size_byte = aead_chunk_size_byteValue;
+      openpgp.config.aeadProtect = aeadProtectValue;
+      openpgp.config.aeadChunkSizeByte = aeadChunkSizeByteValue;
     }
   });
 
   it('Encrypt and decrypt larger text message roundtrip (AEAD)', async function() {
-    let aead_protectValue = openpgp.config.aead_protect;
-    let aead_chunk_size_byteValue = openpgp.config.aead_chunk_size_byte;
-    openpgp.config.aead_protect = true;
-    openpgp.config.aead_chunk_size_byte = 0;
+    let aeadProtectValue = openpgp.config.aeadProtect;
+    let aeadChunkSizeByteValue = openpgp.config.aeadChunkSizeByte;
+    openpgp.config.aeadProtect = true;
+    openpgp.config.aeadChunkSizeByte = 0;
     try {
       let plaintext = [];
       let i = 0;
@@ -577,8 +577,8 @@ function tests() {
       dataArrived();
       expect((await reader.readToEnd()).toString('utf8')).to.equal(util.concat(plaintext));
     } finally {
-      openpgp.config.aead_protect = aead_protectValue;
-      openpgp.config.aead_chunk_size_byte = aead_chunk_size_byteValue;
+      openpgp.config.aeadProtect = aeadProtectValue;
+      openpgp.config.aeadChunkSizeByte = aeadChunkSizeByteValue;
     }
   });
 
@@ -608,10 +608,10 @@ function tests() {
   });
 
   it('Input stream should be canceled when canceling decrypted stream (AEAD)', async function() {
-    const aead_protectValue = openpgp.config.aead_protect;
-    const aead_chunk_size_byteValue = openpgp.config.aead_chunk_size_byte;
-    openpgp.config.aead_protect = true;
-    openpgp.config.aead_chunk_size_byte = 4;
+    const aeadProtectValue = openpgp.config.aeadProtect;
+    const aeadChunkSizeByteValue = openpgp.config.aeadChunkSizeByte;
+    openpgp.config.aeadProtect = true;
+    openpgp.config.aeadChunkSizeByte = 4;
     try {
       const encrypted = await openpgp.encrypt({
         message: openpgp.message.fromBinary(data),
@@ -632,8 +632,8 @@ function tests() {
       await openpgp.stream.cancel(decrypted.data, new Error('canceled by test'));
       expect(canceled).to.be.true;
     } finally {
-      openpgp.config.aead_protect = aead_protectValue;
-      openpgp.config.aead_chunk_size_byte = aead_chunk_size_byteValue;
+      openpgp.config.aeadProtect = aeadProtectValue;
+      openpgp.config.aeadChunkSizeByte = aeadChunkSizeByteValue;
     }
   });
 
@@ -690,10 +690,10 @@ function tests() {
   });
 
   it("Don't pull entire input stream when we're not pulling decrypted stream (AEAD)", async function() {
-    let aead_protectValue = openpgp.config.aead_protect;
-    let aead_chunk_size_byteValue = openpgp.config.aead_chunk_size_byte;
-    openpgp.config.aead_protect = true;
-    openpgp.config.aead_chunk_size_byte = 4;
+    let aeadProtectValue = openpgp.config.aeadProtect;
+    let aeadChunkSizeByteValue = openpgp.config.aeadChunkSizeByte;
+    openpgp.config.aeadProtect = true;
+    openpgp.config.aeadChunkSizeByte = 4;
     let coresStub = stub(openpgp.util, 'getHardwareConcurrency');
     coresStub.returns(1);
     try {
@@ -715,8 +715,8 @@ function tests() {
       await new Promise(resolve => setTimeout(resolve, 3000));
       expect(i).to.be.lessThan(expectedType === 'web' ? 50 : 100);
     } finally {
-      openpgp.config.aead_protect = aead_protectValue;
-      openpgp.config.aead_chunk_size_byte = aead_chunk_size_byteValue;
+      openpgp.config.aeadProtect = aeadProtectValue;
+      openpgp.config.aeadChunkSizeByte = aeadChunkSizeByteValue;
       coresStub.restore();
     }
   });

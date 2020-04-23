@@ -1976,7 +1976,7 @@ function versionSpecificTests() {
       expect(key.subKeys[0].bindingSignatures[0].keyFlags[0] & keyFlags.encrypt_storage).to.equal(keyFlags.encrypt_storage);
       const sym = openpgp.enums.symmetric;
       expect(key.users[0].selfCertifications[0].preferredSymmetricAlgorithms).to.eql([sym.aes256, sym.aes128, sym.aes192]);
-      if (openpgp.config.aead_protect) {
+      if (openpgp.config.aeadProtect) {
         const aead = openpgp.enums.aead;
         expect(key.users[0].selfCertifications[0].preferredAeadAlgorithms).to.eql([aead.eax, aead.ocb]);
       }
@@ -1984,7 +1984,7 @@ function versionSpecificTests() {
       expect(key.users[0].selfCertifications[0].preferredHashAlgorithms).to.eql([hash.sha256, hash.sha512]);
       const compr = openpgp.enums.compression;
       expect(key.users[0].selfCertifications[0].preferredCompressionAlgorithms).to.eql([compr.zlib, compr.zip, compr.uncompressed]);
-      expect(key.users[0].selfCertifications[0].features).to.eql(openpgp.config.v5_keys ? [7] : [1]);
+      expect(key.users[0].selfCertifications[0].features).to.eql(openpgp.config.v5Keys ? [7] : [1]);
     };
     const opt = {userIds: 'test <a@b.com>', passphrase: 'hello'};
     return openpgp.generateKey(opt).then(async function(key) {
@@ -1994,14 +1994,14 @@ function versionSpecificTests() {
   });
 
   it('Preferences of generated key - with config values', async function() {
-    const encryption_cipherVal = openpgp.config.encryption_cipher;
-    const prefer_hash_algorithmVal = openpgp.config.prefer_hash_algorithm;
+    const encryptionCipherVal = openpgp.config.encryptionCipher;
+    const preferHashAlgorithmVal = openpgp.config.preferHashAlgorithm;
     const compressionVal = openpgp.config.compression;
-    const aead_modeVal = openpgp.config.aead_mode;
-    openpgp.config.encryption_cipher = openpgp.enums.symmetric.aes192;
-    openpgp.config.prefer_hash_algorithm = openpgp.enums.hash.sha224;
+    const aeadModeVal = openpgp.config.aeadMode;
+    openpgp.config.encryptionCipher = openpgp.enums.symmetric.aes192;
+    openpgp.config.preferHashAlgorithm = openpgp.enums.hash.sha224;
     openpgp.config.compression = openpgp.enums.compression.zlib;
-    openpgp.config.aead_mode = openpgp.enums.aead.experimental_gcm;
+    openpgp.config.aeadMode = openpgp.enums.aead.experimental_gcm;
 
     const testPref = function(key) {
       // key flags
@@ -2012,7 +2012,7 @@ function versionSpecificTests() {
       expect(key.subKeys[0].bindingSignatures[0].keyFlags[0] & keyFlags.encrypt_storage).to.equal(keyFlags.encrypt_storage);
       const sym = openpgp.enums.symmetric;
       expect(key.users[0].selfCertifications[0].preferredSymmetricAlgorithms).to.eql([sym.aes192, sym.aes256, sym.aes128]);
-      if (openpgp.config.aead_protect) {
+      if (openpgp.config.aeadProtect) {
         const aead = openpgp.enums.aead;
         expect(key.users[0].selfCertifications[0].preferredAeadAlgorithms).to.eql([aead.experimental_gcm, aead.eax, aead.ocb]);
       }
@@ -2020,7 +2020,7 @@ function versionSpecificTests() {
       expect(key.users[0].selfCertifications[0].preferredHashAlgorithms).to.eql([hash.sha224, hash.sha256, hash.sha512]);
       const compr = openpgp.enums.compression;
       expect(key.users[0].selfCertifications[0].preferredCompressionAlgorithms).to.eql([compr.zlib, compr.zip, compr.uncompressed]);
-      expect(key.users[0].selfCertifications[0].features).to.eql(openpgp.config.v5_keys ? [7] : [1]);
+      expect(key.users[0].selfCertifications[0].features).to.eql(openpgp.config.v5Keys ? [7] : [1]);
     };
     const opt = {userIds: 'test <a@b.com>', passphrase: 'hello'};
     try {
@@ -2028,10 +2028,10 @@ function versionSpecificTests() {
       testPref(key.key);
       testPref(await openpgp.key.readArmored(key.publicKeyArmored));
     } finally {
-      openpgp.config.encryption_cipher = encryption_cipherVal;
-      openpgp.config.prefer_hash_algorithm = prefer_hash_algorithmVal;
+      openpgp.config.encryptionCipher = encryptionCipherVal;
+      openpgp.config.preferHashAlgorithm = preferHashAlgorithmVal;
       openpgp.config.compression = compressionVal;
-      openpgp.config.aead_mode = aead_modeVal;
+      openpgp.config.aeadMode = aeadModeVal;
     }
   });
 
@@ -2531,14 +2531,14 @@ describe('Key', function() {
   tryTests('V5', versionSpecificTests, {
     if: !openpgp.config.ci,
     beforeEach: function() {
-      v5_keysVal = openpgp.config.v5_keys;
-      aead_protectVal = openpgp.config.aead_protect;
-      openpgp.config.v5_keys = true;
-      openpgp.config.aead_protect = true;
+      v5KeysVal = openpgp.config.v5Keys;
+      aeadProtectVal = openpgp.config.aeadProtect;
+      openpgp.config.v5Keys = true;
+      openpgp.config.aeadProtect = true;
     },
     afterEach: function() {
-      openpgp.config.v5_keys = v5_keysVal;
-      openpgp.config.aead_protect = aead_protectVal;
+      openpgp.config.v5Keys = v5KeysVal;
+      openpgp.config.aeadProtect = aeadProtectVal;
     }
   });
 
@@ -2672,22 +2672,22 @@ describe('Key', function() {
   });
 
   it('should not decrypt using a sign-only RSA key, unless explicitly configured', async function () {
-    const allowSigningKeyDecryption = openpgp.config.allow_insecure_decryption_with_signing_keys;
+    const allowSigningKeyDecryption = openpgp.config.allowInsecureDecryptionWithSigningKeys;
     const key = await openpgp.key.readArmored(rsaSignOnly);
     try {
-      openpgp.config.allow_insecure_decryption_with_signing_keys = false;
+      openpgp.config.allowInsecureDecryptionWithSigningKeys = false;
       await expect(openpgp.decrypt({
         message: await openpgp.message.readArmored(encryptedRsaSignOnly),
         privateKeys: key
       })).to.be.rejectedWith(/Session key decryption failed/);
 
-      openpgp.config.allow_insecure_decryption_with_signing_keys = true;
+      openpgp.config.allowInsecureDecryptionWithSigningKeys = true;
       await expect(openpgp.decrypt({
         message: await openpgp.message.readArmored(encryptedRsaSignOnly),
         privateKeys: key
       })).to.be.fulfilled;
     } finally {
-      openpgp.config.allow_insecure_decryption_with_signing_keys = allowSigningKeyDecryption;
+      openpgp.config.allowInsecureDecryptionWithSigningKeys = allowSigningKeyDecryption;
     }
   });
 
