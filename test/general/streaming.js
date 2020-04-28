@@ -170,8 +170,8 @@ function tests() {
     dataArrived(); // Do not wait until data arrived.
     const data = new ReadableStream({
       async start(controller) {
-        controller.enqueue(util.str_to_Uint8Array('hello '));
-        controller.enqueue(util.str_to_Uint8Array('world'));
+        controller.enqueue(util.strToUint8Array('hello '));
+        controller.enqueue(util.strToUint8Array('world'));
         controller.close();
       }
     });
@@ -745,8 +745,8 @@ function tests() {
     dataArrived(); // Do not wait until data arrived.
     const data = new ReadableStream({
       async start(controller) {
-        controller.enqueue(util.str_to_Uint8Array('hello '));
-        controller.enqueue(util.str_to_Uint8Array('world'));
+        controller.enqueue(util.strToUint8Array('hello '));
+        controller.enqueue(util.strToUint8Array('world'));
         controller.close();
       }
     });
@@ -773,8 +773,8 @@ function tests() {
     dataArrived(); // Do not wait until data arrived.
     const data = new ReadableStream({
       async start(controller) {
-        controller.enqueue(util.str_to_Uint8Array('hello '));
-        controller.enqueue(util.str_to_Uint8Array('world'));
+        controller.enqueue(util.strToUint8Array('hello '));
+        controller.enqueue(util.strToUint8Array('world'));
         controller.close();
       }
     });
@@ -801,8 +801,8 @@ function tests() {
     dataArrived(); // Do not wait until data arrived.
     const data = new ReadableStream({
       async start(controller) {
-        controller.enqueue(util.str_to_Uint8Array('hello '));
-        controller.enqueue(util.str_to_Uint8Array('world'));
+        controller.enqueue(util.strToUint8Array('hello '));
+        controller.enqueue(util.strToUint8Array('world'));
         controller.close();
       }
     });
@@ -832,8 +832,8 @@ function tests() {
     dataArrived(); // Do not wait until data arrived.
     const data = new ReadableStream({
       async start(controller) {
-        controller.enqueue(util.str_to_Uint8Array('hello '));
-        controller.enqueue(util.str_to_Uint8Array('world'));
+        controller.enqueue(util.strToUint8Array('hello '));
+        controller.enqueue(util.strToUint8Array('world'));
         controller.close();
       }
     });
